@@ -71,6 +71,12 @@ const SignupPage = () => {
     );
   };
 
+  const handleGoogleLogin = async () => {
+    await authClient.signIn.social({
+       provider: 'google',
+     })
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-950 via-red-900 to-red-950 text-zinc-900 px-6 py-12 relative overflow-hidden font-sans">
       {/* Glow Blobs */}
@@ -92,9 +98,9 @@ const SignupPage = () => {
           </p>
         </div>
 
-        {/* Google Social Login */}
+        {/* Google Login */}
         <Button
-          type="button"
+          onClick={handleGoogleLogin}
           className="w-full flex items-center justify-center gap-3 py-3 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-900/50 cursor-pointer transition-colors duration-200 text-sm font-bold text-zinc-700 dark:text-zinc-300 bg-transparent"
         >
           {googleCustomLogo}
