@@ -4,7 +4,7 @@ import { ArrowRight, ShoppingBag } from 'lucide-react';
 const HeroSection = () => {
   return (
 
-      <section className="relative min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-red-800 via-red-800 to-red-900 text-white overflow-hidden pt-28 pb-16 px-6 md:px-12 lg:px-24">
+      <section className="relative min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-red-900 via-red-800 to-red-900 text-white overflow-hidden pt-28 pb-16 px-6 md:px-12 lg:px-24">
         {/* Abstract Background Accents */}
         <div className="absolute top-1/4 left-10 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl pointer-events-none -z-10" />
         <div className="absolute bottom-10 right-1/3 w-96 h-96 bg-red-900/40 rounded-full blur-3xl pointer-events-none -z-10" />
