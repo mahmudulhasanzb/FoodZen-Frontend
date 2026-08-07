@@ -5,27 +5,18 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   Home,
   Compass,
-  HeartHandshake,
-  Coins,
   History,
   PlusCircle,
-  FolderHeart,
-  ArrowUpRight,
-  Users,
-  ShieldCheck,
-  FileCheck,
-  BarChart3,
   User,
   ChevronDown,
   LogOut,
-  CheckSquare,
   Backpack,
 } from 'lucide-react';
 import { useRef, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { authClient } from '@/src/lib/auth-client';
 
-const UserMenuItem = [
+const adminMenuItem = [
   { label: 'Home', href: '/dashboard/user/home', icon: Home },
   { label: 'Explore Campaigns', href: '/campaigns', icon: Compass },
   {
@@ -40,14 +31,14 @@ const UserMenuItem = [
   },
 ];
 
-const ownerMenu = [
-  { label: 'Home', href: '/dashboard/owner/home', icon: Home },
-  { label: 'Add Foods', href: '/dashboard/owner/add-foods', icon: PlusCircle },
+const storeMenu = [
+  { label: 'Home', href: '/dashboard/store/home', icon: Home },
+  { label: 'Add Foods', href: '/dashboard/store/add-foods', icon: PlusCircle },
 ];
 
 const roleColors: Record<string, string> = {
   user: '#FACC15',
-  owner: '#EF4444',
+  store: '#EF4444',
 };
 
 const DashboardSideBar = () => {
@@ -56,16 +47,16 @@ const DashboardSideBar = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<any>(null);
 
-  const { data: session } = authClient.useSession();
   const pathname = usePathname();
+  const { data: session } = authClient.useSession();
   const user = session?.user as any;
   const role = user?.role;
 
   const menuItems =
-    role === 'user'
-      ? UserMenuItem
-      : role === 'owner'
-        ? ownerMenu
+    role === 'admin'
+      ? adminMenuItem
+      : role === 'store'
+        ? storeMenu
           : [];
 
   useEffect(() => {
