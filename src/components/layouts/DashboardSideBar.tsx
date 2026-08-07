@@ -33,7 +33,8 @@ const adminMenuItem = [
 
 const storeMenu = [
   { label: 'Home', href: '/dashboard/store/home', icon: Home },
-  { label: 'Add Foods', href: '/dashboard/store/add-foods', icon: PlusCircle },
+  { label: 'Add Product', href: '/dashboard/store/add-product', icon: PlusCircle },
+  { label: 'Manage Products', href: '/dashboard/store/manage-products', icon: PlusCircle },
 ];
 
 const roleColors: Record<string, string> = {

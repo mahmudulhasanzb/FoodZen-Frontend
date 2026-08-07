@@ -27,17 +27,23 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { serverMutation } from '@/src/lib/api/mutation';
+import { authClient } from '@/src/lib/auth-client';
+import { strict } from 'assert';
+import { string } from 'better-auth';
 
-interface AddFoodFormValues {
+interface AddProductFormValues {
   title: string;
   description: string;
   price: number;
   kcal: number;
   spicy: string;
-  preparation: string;
+  preparation: number;
+  imageUrl: string;
 }
 
-const AddFodsPage = () => {
+const AddProductPage = () => {
+  const {data: session} = authClient.useSession() 
+  const storeEmail =  session?.user?.email
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -47,16 +53,17 @@ const AddFodsPage = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: AddProductFormValues) => {
+    const productData = {
+      ...data,
+      storeEmail: storeEmail,
+    }
     setIsSubmitting(true);
-    // Post Food Items data
-    console.log('Food item data:', data);
-    const addFoodItem = serverMutation('/api/food-items', 'POST', data);
-    if (addFoodItem) {
-      toast.success('Food item added successfully!');
+    // Post Product data
+    const addProduct = serverMutation('/api/products', 'POST', productData);
+    if (addProduct) {
+      toast.success('Product added successfully!');
       reset();
-    } else {
-      toast.error('Failed to add food item');
     }
     setIsSubmitting(false);
   };
@@ -86,7 +93,7 @@ const AddFodsPage = () => {
                 {/* Title */}
                 <div className="col-span-1 md:col-span-2">
                   <TextField isRequired isInvalid={!!errors.title} name="title">
-                    <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider block mb-1">
+                    <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                       <Tag className="w-3.5 h-3.5 text-zinc-400" />
                       Food Title
                     </Label>
@@ -104,7 +111,30 @@ const AddFodsPage = () => {
                     />
                     {errors.title && (
                       <FieldError className="text-xs text-red-650 dark:text-red-400 mt-1 block">
-                        {errors.title.message}
+                        {errors.title.message as string}
+                      </FieldError>
+                    )}
+                  </TextField>
+                </div>
+
+                {/* Image URL*/}
+                <div className="col-span-1 md:col-span-2">
+                  <TextField isRequired isInvalid={!!errors.imageUrl} name="imageUrl">
+                    <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
+                      <Tag className="w-3.5 h-3.5 text-zinc-400" />
+                      Image URL
+                    </Label>
+                    <Input
+                      placeholder="e.g. https://example.com/image.jpg"
+                      variant="primary"
+                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
+                      {...register('imageUrl', {
+                        required: 'Image URL is required',
+                      })}
+                    />
+                    {errors.imageUrl && (
+                      <FieldError className="text-xs text-red-650 dark:text-red-400 mt-1 block">
+                        {errors.imageUrl.message as string}
                       </FieldError>
                     )}
                   </TextField>
@@ -112,7 +142,7 @@ const AddFodsPage = () => {
 
                 {/* Price */}
                 <TextField isRequired isInvalid={!!errors.price} name="price">
-                  <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider block mb-1">
+                  <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                     <DollarSign className="w-3.5 h-3.5 text-zinc-400" />
                     Price ($)
                   </Label>
@@ -129,14 +159,14 @@ const AddFodsPage = () => {
                   />
                   {errors.price && (
                     <FieldError className="text-xs text-red-650 dark:text-red-400 mt-1 block">
-                      {errors.price.message}
+                      {errors.price.message as string}
                     </FieldError>
                   )}
                 </TextField>
 
                 {/* Kcal */}
                 <TextField isRequired isInvalid={!!errors.kcal} name="kcal">
-                  <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider block mb-1">
+                  <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                     <Flame className="w-3.5 h-3.5 text-zinc-400" />
                     Kcal (Calories)
                   </Label>
@@ -152,14 +182,14 @@ const AddFodsPage = () => {
                   />
                   {errors.kcal && (
                     <FieldError className="text-xs text-red-650 dark:text-red-400 mt-1 block">
-                      {errors.kcal.message}
+                      {errors.kcal.message as string}
                     </FieldError>
                   )}
                 </TextField>
 
                 {/* Spicy */}
                 <TextField isRequired isInvalid={!!errors.spicy} name="spicy">
-                  <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider block mb-1">
+                  <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                     <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
                     Spicy
                   </Label>
@@ -177,18 +207,19 @@ const AddFodsPage = () => {
                   </div>
                   {errors.spicy && (
                     <FieldError className="text-xs text-red-650 dark:text-red-400 mt-1 block">
-                      {errors.spicy.message}
+                      {errors.spicy.message as string}
                     </FieldError>
                   )}
                 </TextField>
 
                 {/* Preparation Time */}
                 <TextField isRequired isInvalid={!!errors.preparation} name="preparation">
-                  <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider block mb-1">
+                  <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                     <Clock className="w-3.5 h-3.5 text-zinc-400" />
                     Preparation Time
                   </Label>
                   <Input
+                    type='number'
                     placeholder="e.g. 15-20 mins"
                     variant="primary"
                     className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
@@ -198,7 +229,7 @@ const AddFodsPage = () => {
                   />
                   {errors.preparation && (
                     <FieldError className="text-xs text-red-650 dark:text-red-400 mt-1 block">
-                      {errors.preparation.message}
+                      {errors.preparation.message as string}
                     </FieldError>
                   )}
                 </TextField>
@@ -206,7 +237,7 @@ const AddFodsPage = () => {
                 {/* Description */}
                 <div className="col-span-1 md:col-span-2">
                   <TextField isRequired isInvalid={!!errors.description} name="description" className="w-full">
-                    <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider block mb-1">
+                    <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                       <MessageSquare className="w-3.5 h-3.5 text-zinc-400" />
                       Description
                     </Label>
@@ -225,7 +256,7 @@ const AddFodsPage = () => {
                     />
                     {errors.description && (
                       <FieldError className="text-xs text-red-650 dark:text-red-400 mt-1 block">
-                        {errors.description.message}
+                        {errors.description.message as string}
                       </FieldError>
                     )}
                   </TextField>
@@ -260,12 +291,12 @@ const AddFodsPage = () => {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         />
                       </svg>
-                      <span>Adding Food...</span>
+                      <span>Adding Product...</span>
                     </>
                   ) : (
                     <>
                       <Check className="w-4 h-4" />
-                      <span>Add Food Item</span>
+                      <span>Add Product</span>
                     </>
                   )}
                 </Button>
@@ -278,5 +309,5 @@ const AddFodsPage = () => {
   );
 };
 
-export default AddFodsPage;
+export default AddProductPage;
 
