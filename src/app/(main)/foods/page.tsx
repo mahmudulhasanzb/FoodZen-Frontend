@@ -1,9 +1,9 @@
 import React from 'react';
 import { Sparkles } from 'lucide-react';
 
-import FoodCard from '@/src/components/food/FoodCard';
+import ProductCard from '@/src/components/products/Products';
 
-const Foods = [
+const Products = [
   {
     id: 1,
     name: 'Zen Signature Burger',
@@ -61,7 +61,7 @@ const Foods = [
   },
 ];
 
-const AllFoodsPage = () => {
+const AllProductsPage = () => {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 transition-colors duration-300">
       {/* Hero Header Section */}
@@ -86,11 +86,11 @@ const AllFoodsPage = () => {
         </div>
       </section>
 
-      {/* Main Foods Grid */}
+      {/* Main Products Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-          {Foods.map(food => {
-            return <FoodCard key={food.id} food={food} />;
+          {Products.map(product => {
+            return <ProductCard key={product.id} product={product} />;
           })}
         </div>
       </div>
@@ -98,4 +98,4 @@ const AllFoodsPage = () => {
   );
 };
 
-export default AllFoodsPage;
+export default AllProductsPage;

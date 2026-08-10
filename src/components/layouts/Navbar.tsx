@@ -9,7 +9,7 @@ import { authClient } from '@/src/lib/auth-client'
 const navLinks = [
   { label: 'Home', path: '/' },
   { label: 'Table', path: '/reserve-table' },
-  { label: 'Foods', path: '/foods' },
+  { label: 'Products', path: '/foods' },
   { label: 'About', path: '/about' },
   { label: 'Contact', path: '/contact' },
 ]

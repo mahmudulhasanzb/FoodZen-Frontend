@@ -81,7 +81,7 @@ const AddProductPage = () => {
                 </div>
                 <div>
                   <Fieldset.Legend className="text-xl font-extrabold text-red-950 dark:text-white leading-tight">
-                    Add New Food Item
+                    Add New Product Item
                   </Fieldset.Legend>
                   <Description className="text-xs text-zinc-550 dark:text-zinc-400 mt-0.5">
                     Fill in details to add a new dish to your store menu.
@@ -95,14 +95,14 @@ const AddProductPage = () => {
                   <TextField isRequired isInvalid={!!errors.title} name="title">
                     <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                       <Tag className="w-3.5 h-3.5 text-zinc-400" />
-                      Food Title
+                      Product Title
                     </Label>
                     <Input
                       placeholder="e.g. Spicy Artisan Ramen"
                       variant="primary"
                       className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
                       {...register('title', {
-                        required: 'Food title is required',
+                        required: 'Product title is required',
                         minLength: {
                           value: 2,
                           message: 'Title must be at least 2 characters',
