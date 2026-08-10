@@ -12,14 +12,17 @@ import {
   PackageOpen,
   Tag,
 } from 'lucide-react';
-import { LogoGithub } from '@gravity-ui/icons';
 import { Button } from '@heroui/react';
 import DeleteModal from '../DeleteModal';
+import ProductDetailsModal from './ProductDetailsModal';
 
 const ManageProductTable = ({ products = [] }) => {
   const [selectedProduct, setSelectedProduct] = useState(null); // Details Modal
 
   return (
+    <div>
+    
+
     <div className="bg-[#0f0f11] border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-xl">
       {/* Table Container */}
       <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-800">
@@ -166,11 +169,12 @@ const ManageProductTable = ({ products = [] }) => {
         </table>
       </div>
 
+    </div>
       {/* Details Popup Component */}
-      {/* <ProductDetailsModal
-        Product={selectedProduct}
+      <ProductDetailsModal
+        product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
-      /> */}
+      />
     </div>
   );
 };
