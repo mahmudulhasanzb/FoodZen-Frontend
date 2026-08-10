@@ -19,3 +19,16 @@ export const serverFetch = async (path: string) => {
     console.error(`JSON parse error for ${formatedPath}:`, error);
   }
 };
+
+// get store produtcs
+// following simple fetch function
+export const getStoreProductsByStoreEmail = async (
+  path: string,
+  storeEmail: string,
+) => {
+  const res = await fetch(`${baseUrl}${path}/${storeEmail}`, {
+    cache: 'no-store',
+  });
+  const data = await res.json();
+  return data;
+};

@@ -1,29 +1,47 @@
+'use client'
 import Link from 'next/link';
 import { Sparkles, Plus, FolderGit2, Globe, FileText } from 'lucide-react';
 import { Button } from '@heroui/react';
+import { getStoreProductsByStoreEmail } from '@/src/lib/api/server';
+import { authClient } from '@/src/lib/auth-client';
+import { useEffect, useState } from 'react';
+
+const ManageProductsPage = () => {
+  // todo: get all products by by using user email
 
 
-const ManageProductsPage = async () => {
-  // const products = await getAllProducts();
-  const products = [{
-    _id: '1',
-    name:'Product 1',
-    description:'Description 1',
-    price:10,
-    image:'https://example.com/image1.jpg',
-    isActive:true,
-    category:'Category 1',
+  const session = authClient.useSession();
+  const storeEmail = session?.data?.user?.email;
+  console.log('store email:', storeEmail)
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    if (!storeEmail) return;
+    getStoreProductsByStoreEmail(`/api/products`, storeEmail as string)
+      .then(data => {
+      setProducts(data);
+    });
+  }, [storeEmail]);
+  console.log('store products:', products);
+
+  // const products = [{
+  //   _id: '1',
+  //   name:'Product 1',
+  //   description:'Description 1',
+  //   price:10,
+  //   image:'https://example.com/image1.jpg',
+  //   isActive:true,
+  //   category:'Category 1',
    
-  }, { 
-    _id:'2',
-    name:'Product 2',
-    description:'Description 2',
-    price:20,
-    image:'https://example.com/image2.jpg',
-    isAvailable:false,
-    category:'Category 2',
+  // }, { 
+  //   _id:'2',
+  //   name:'Product 2',
+  //   description:'Description 2',
+  //   price:20,
+  //   image:'https://example.com/image2.jpg',
+  //   isAvailable:false,
+  //   category:'Category 2',
    
-  }]
+  // }]
 
   const totalCount = products.length;
   const inStockCount = products.filter(
