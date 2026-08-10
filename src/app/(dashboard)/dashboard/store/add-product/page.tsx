@@ -28,9 +28,8 @@ import {
 import toast from 'react-hot-toast';
 import { serverMutation } from '@/src/lib/api/mutation';
 import { authClient } from '@/src/lib/auth-client';
-import { strict } from 'assert';
-import { string } from 'better-auth';
 
+// interface types for Add Product Form
 interface AddProductFormValues {
   title: string;
   description: string;
@@ -39,39 +38,57 @@ interface AddProductFormValues {
   spicy: string;
   preparation: number;
   imageUrl: string;
+  isAvailable?: boolean;
+  storeEmail?: string;
 }
 
+// Add Product Page Starts
 const AddProductPage = () => {
-  const {data: session} = authClient.useSession() 
-  const storeEmail =  session?.user?.email
+  // user data from authClient
+  const { data: session } = authClient.useSession();
+  const storeEmail = session?.user?.email;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+// react hook form
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm<AddProductFormValues>({
+    defaultValues: {
+      isAvailable: true,
+      spicy: 'no',
+    },
+  });
 
+  // handle form submission
   const onSubmit = async (data: AddProductFormValues) => {
     const productData = {
       ...data,
+      isAvailable: true,
       storeEmail: storeEmail,
-    }
+    };
     setIsSubmitting(true);
-    // Post Product data
-    const addProduct = serverMutation('/api/products', 'POST', productData);
-    if (addProduct) {
-      toast.success('Product added successfully!');
-      reset();
+    try {
+      // Post Product data
+      const addProduct = await serverMutation('/api/products', 'POST', productData);
+      if (addProduct) {
+        toast.success('Product added successfully!');
+        reset();
+      }
+    } catch (error) {
+      toast.error('Failed to add product');
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-white dark:bg-zinc-900 rounded-3xl p-1 shadow-2xl border border-red-100/5 my-8">
       <div className="flex items-center justify-center rounded-3xl bg-surface p-4 md:p-8">
         <Surface className="w-full">
+          {/* Add Product Form UI */}
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Fieldset className="w-full">
               {/* Form Header */}
@@ -119,7 +136,11 @@ const AddProductPage = () => {
 
                 {/* Image URL*/}
                 <div className="col-span-1 md:col-span-2">
-                  <TextField isRequired isInvalid={!!errors.imageUrl} name="imageUrl">
+                  <TextField
+                    isRequired
+                    isInvalid={!!errors.imageUrl}
+                    name="imageUrl"
+                  >
                     <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                       <Tag className="w-3.5 h-3.5 text-zinc-400" />
                       Image URL
@@ -154,7 +175,10 @@ const AddProductPage = () => {
                     className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
                     {...register('price', {
                       required: 'Price is required',
-                      min: { value: 0.01, message: 'Price must be greater than 0' },
+                      min: {
+                        value: 0.01,
+                        message: 'Price must be greater than 0',
+                      },
                     })}
                   />
                   {errors.price && (
@@ -196,7 +220,9 @@ const AddProductPage = () => {
                   <div className="relative">
                     <select
                       className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-3 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 cursor-pointer appearance-none text-zinc-900 dark:text-white"
-                      {...register('spicy', { required: 'Spicy option is required' })}
+                      {...register('spicy', {
+                        required: 'Spicy option is required',
+                      })}
                     >
                       <option value="no">No (Not Spicy)</option>
                       <option value="yes">Yes (Spicy)</option>
@@ -213,13 +239,17 @@ const AddProductPage = () => {
                 </TextField>
 
                 {/* Preparation Time */}
-                <TextField isRequired isInvalid={!!errors.preparation} name="preparation">
+                <TextField
+                  isRequired
+                  isInvalid={!!errors.preparation}
+                  name="preparation"
+                >
                   <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                     <Clock className="w-3.5 h-3.5 text-zinc-400" />
                     Preparation Time
                   </Label>
                   <Input
-                    type='number'
+                    type="number"
                     placeholder="e.g. 15-20 mins"
                     variant="primary"
                     className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
@@ -236,7 +266,12 @@ const AddProductPage = () => {
 
                 {/* Description */}
                 <div className="col-span-1 md:col-span-2">
-                  <TextField isRequired isInvalid={!!errors.description} name="description" className="w-full">
+                  <TextField
+                    isRequired
+                    isInvalid={!!errors.description}
+                    name="description"
+                    className="w-full"
+                  >
                     <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                       <MessageSquare className="w-3.5 h-3.5 text-zinc-400" />
                       Description
@@ -310,4 +345,3 @@ const AddProductPage = () => {
 };
 
 export default AddProductPage;
-
