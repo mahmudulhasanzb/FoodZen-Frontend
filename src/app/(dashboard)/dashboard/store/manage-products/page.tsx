@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Sparkles, Plus, FolderGit2, Globe, FileText } from 'lucide-react';
 import { Button } from '@heroui/react';
-import { getStoreProductsByStoreEmail } from '@/src/lib/api/server';
+import { getStoreProductsByStoreEmail } from '@/src/lib/api/products/data';
 import { authClient } from '@/src/lib/auth-client';
 import { useEffect, useState } from 'react';
 import ManageProductTable from '@/src/components/products/ManageProductTable';

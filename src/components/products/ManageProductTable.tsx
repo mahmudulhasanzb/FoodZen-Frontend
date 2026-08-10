@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { LogoGithub } from '@gravity-ui/icons';
 import { Button } from '@heroui/react';
+import DeleteModal from '../DeleteModal';
 
 const ManageProductTable = ({ products = [] }) => {
   const [selectedProduct, setSelectedProduct] = useState(null); // Details Modal
@@ -138,7 +139,7 @@ const ManageProductTable = ({ products = [] }) => {
                           </Button>
                         </Link>
                         {/* Delete Modal */}
-                        {/* <DeleteModal product={product} /> */}
+                        <DeleteModal product={product} />
                       </div>
                     </td>
                   </tr>
