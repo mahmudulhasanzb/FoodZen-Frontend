@@ -5,6 +5,7 @@ import { Button } from '@heroui/react';
 import { getStoreProductsByStoreEmail } from '@/src/lib/api/server';
 import { authClient } from '@/src/lib/auth-client';
 import { useEffect, useState } from 'react';
+import ManageProductTable from '@/src/components/products/ManageProductTable';
 
 const ManageProductsPage = () => {
   // todo: get all products by by using user email
@@ -128,7 +129,7 @@ const ManageProductsPage = () => {
       </div>
 
       {/* Products Table Component */}
-
+      <ManageProductTable products={products}/>
     </div>
   );
 };

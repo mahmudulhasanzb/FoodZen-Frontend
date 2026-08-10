@@ -24,6 +24,7 @@ import {
   Check,
   ChevronDown,
   Sparkles,
+  Link,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { serverMutation } from '@/src/lib/api/mutation';
@@ -36,9 +37,11 @@ interface AddProductFormValues {
   price: number;
   kcal: number;
   spicy: string;
+  category: string;
   preparation: number;
   imageUrl: string;
   isAvailable?: boolean;
+  ratings?: number;
   storeEmail?: string;
 }
 
@@ -49,7 +52,7 @@ const AddProductPage = () => {
   const storeEmail = session?.user?.email;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-// react hook form
+  // react hook form
   const {
     register,
     handleSubmit,
@@ -67,12 +70,17 @@ const AddProductPage = () => {
     const productData = {
       ...data,
       isAvailable: true,
+      ratings: 0,
       storeEmail: storeEmail,
     };
     setIsSubmitting(true);
     try {
       // Post Product data
-      const addProduct = await serverMutation('/api/products', 'POST', productData);
+      const addProduct = await serverMutation(
+        '/api/products',
+        'POST',
+        productData,
+      );
       if (addProduct) {
         toast.success('Product added successfully!');
         reset();
@@ -111,7 +119,8 @@ const AddProductPage = () => {
                 <div className="col-span-1 md:col-span-2">
                   <TextField isRequired isInvalid={!!errors.title} name="title">
                     <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
-                      <Tag className="w-3.5 h-3.5 text-zinc-400" />
+                      {/* todo add a relevant icon */}
+                      {/* < className="w-3.5 h-3.5 text-zinc-400" /> */}
                       Product Title
                     </Label>
                     <Input
@@ -142,7 +151,7 @@ const AddProductPage = () => {
                     name="imageUrl"
                   >
                     <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
-                      <Tag className="w-3.5 h-3.5 text-zinc-400" />
+                      <Link className="w-3.5 h-3.5 text-zinc-400" />
                       Image URL
                     </Label>
                     <Input
@@ -264,6 +273,36 @@ const AddProductPage = () => {
                   )}
                 </TextField>
 
+                {/* Category */}
+                <TextField isRequired isInvalid={!!errors.category} name="category">
+                  <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
+                    <Tag className="w-3.5 h-3.5 text-zinc-400" />
+                    Category
+                  </Label>
+                  <div className="relative">
+                    <select
+                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-3 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 cursor-pointer appearance-none text-zinc-900 dark:text-white"
+                      {...register('category', {
+                        required: 'Category option is required',
+                      })}
+                    >
+                      <option value="">Select Category</option>
+                      <option value="fast-food">Fast Food</option>
+                      <option value="dessert">Dessert</option>
+                      <option value="non-veg">Non-Veg</option>
+                      <option value="other">Other</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-zinc-400">
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
+                  </div>
+                  {errors.category && (
+                    <FieldError className="text-xs text-red-650 dark:text-red-400 mt-1 block">
+                      {errors.category.message as string}
+                    </FieldError>
+                  )}
+                </TextField>
+
                 {/* Description */}
                 <div className="col-span-1 md:col-span-2">
                   <TextField
@@ -340,6 +379,8 @@ const AddProductPage = () => {
           </Form>
         </Surface>
       </div>
+
+      {/* Products Table Components */}
     </div>
   );
 };
