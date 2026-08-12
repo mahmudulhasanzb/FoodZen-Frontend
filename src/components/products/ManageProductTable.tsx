@@ -21,8 +21,6 @@ const ManageProductTable = ({ products = [] }) => {
 
   return (
     <div>
-    
-
     <div className="bg-[#0f0f11] border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden backdrop-blur-xl">
       {/* Table Container */}
       <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-800">
@@ -131,16 +129,18 @@ const ManageProductTable = ({ products = [] }) => {
                         </Button>
 
                         <Link
-                          href={`/dashboard/store/manage-product/${product._id}`}
+                          href={`/dashboard/store/manage-products/${product._id}`}
                         >
+                          {/* Todo set up the edit $ update modale */}
                           <Button
                             className="px-3 py-1.5 rounded-xl bg-yellow-400/10 hover:bg-yellow-400/20 text-yellow-400 text-xs font-extrabold border border-yellow-400/30 flex items-center gap-1.5 transition-all cursor-pointer shadow-[0_2px_10px_rgba(250,204,21,0.1)]"
-                            title="Edit Product"
+                            title="Edit & Update Product"
                           >
                             <Edit3 size={13} />
-                            <span>Edit</span>
+                            <span>Edit & Update</span>
                           </Button>
                         </Link>
+
                         {/* Delete Modal */}
                         <DeleteModal product={product} />
                       </div>

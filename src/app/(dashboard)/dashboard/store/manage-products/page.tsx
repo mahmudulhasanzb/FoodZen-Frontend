@@ -13,7 +13,6 @@ const ManageProductsPage = () => {
 
   const session = authClient.useSession();
   const storeEmail = session?.data?.user?.email;
-  console.log('store email:', storeEmail)
   const [products, setProducts] = useState([]);
   useEffect(() => {
     if (!storeEmail) return;
