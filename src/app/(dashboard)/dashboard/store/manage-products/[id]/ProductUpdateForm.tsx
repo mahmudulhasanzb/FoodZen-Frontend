@@ -44,14 +44,13 @@ export interface ProductFormValues {
 }
 
 interface ProductUpdateFormProps {
-  product: any;
+  product: ProductFormValues;
   id: string;
 }
 
 export default function ProductUpdateForm({ product, id }: ProductUpdateFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
 
   const {
     register,
@@ -60,29 +59,20 @@ export default function ProductUpdateForm({ product, id }: ProductUpdateFormProp
     formState: { errors },
   } = useForm({
     defaultValues: {
-      title: product?.title,
-      description: product?.description,
-      price: product?.price,
-      kcal: product?.kcal,
-      spicy: product?.spicy,
-      category: product?.category,
-      preparation: product?.preparation,
-      imageUrl: product?.imageUrl,
+      title: product?.title || '',
+      description: product?.description || '',
+      price: product?.price || '',
+      kcal: product?.kcal || '',
+      spicy: product?.spicy || 'no',
+      category: product?.category || '',
+      preparation: product?.preparation || '',
+      imageUrl: product?.imageUrl || '',
     },
-    values: {
-      title: product?.title,
-      description: product?.description,
-      price: product?.price,
-      kcal: product?.kcal,
-      spicy: product?.spicy,
-      category: product?.category,
-      preparation: product?.preparation,
-      imageUrl: product?.imageUrl,
-    },
-  });
+  }
+);
 
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ProductFormValues) => {
     setIsSubmitting(true);
     try {
       const productData = {
@@ -146,11 +136,9 @@ export default function ProductUpdateForm({ product, id }: ProductUpdateFormProp
                     <Label className="flex items-center gap-1.5 text-xs font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-1">
                       Product Title
                     </Label>
-                    <Input
+                    <input
                       placeholder="e.g. Spicy Artisan Ramen"
-                      variant="primary"
-                      defaultValue={product?.title}
-                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
+                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm !text-zinc-900 dark:!text-white hover:!text-zinc-900 dark:hover:!text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
                       {...register('title', {
                         required: 'Product title is required',
                         minLength: {
@@ -178,11 +166,9 @@ export default function ProductUpdateForm({ product, id }: ProductUpdateFormProp
                       <LinkIcon className="w-3.5 h-3.5 text-zinc-400" />
                       Image URL
                     </Label>
-                    <Input
+                    <input
                       placeholder="e.g. https://example.com/image.jpg"
-                      variant="primary"
-                      defaultValue={product?.imageUrl}
-                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
+                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm !text-zinc-900 dark:!text-white hover:!text-zinc-900 dark:hover:!text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
                       {...register('imageUrl', {
                         required: 'Image URL is required',
                       })}
@@ -201,13 +187,11 @@ export default function ProductUpdateForm({ product, id }: ProductUpdateFormProp
                     <DollarSign className="w-3.5 h-3.5 text-zinc-400" />
                     Price ($)
                   </Label>
-                  <Input
+                  <input
                     type="number"
                     step="0.01"
                     placeholder="14.99"
-                    variant="primary"
-                    defaultValue={product?.price}
-                    className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
+                    className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm !text-zinc-900 dark:!text-white hover:!text-zinc-900 dark:hover:!text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
                     {...register('price', {
                       required: 'Price is required',
                       min: {
@@ -229,12 +213,10 @@ export default function ProductUpdateForm({ product, id }: ProductUpdateFormProp
                     <Flame className="w-3.5 h-3.5 text-zinc-400" />
                     Kcal (Calories)
                   </Label>
-                  <Input
+                  <input
                     type="number"
                     placeholder="650"
-                    variant="primary"
-                    defaultValue={product?.kcal}
-                    className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
+                    className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm !text-zinc-900 dark:!text-white hover:!text-zinc-900 dark:hover:!text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
                     {...register('kcal', {
                       required: 'Kcal is required',
                       min: { value: 0, message: 'Kcal cannot be negative' },
@@ -255,8 +237,7 @@ export default function ProductUpdateForm({ product, id }: ProductUpdateFormProp
                   </Label>
                   <div className="relative">
                     <select
-                      defaultValue={product?.spicy}
-                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-3 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 cursor-pointer appearance-none text-zinc-900 dark:text-white"
+                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-3 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 cursor-pointer appearance-none !text-zinc-900 dark:!text-white hover:!text-zinc-900 dark:hover:!text-white"
                       {...register('spicy', {
                         required: 'Spicy option is required',
                       })}
@@ -285,12 +266,10 @@ export default function ProductUpdateForm({ product, id }: ProductUpdateFormProp
                     <Clock className="w-3.5 h-3.5 text-zinc-400" />
                     Preparation Time (mins)
                   </Label>
-                  <Input
+                  <input
                     type="number"
                     placeholder="15"
-                    variant="primary"
-                    defaultValue={product?.preparation}
-                    className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
+                    className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm !text-zinc-900 dark:!text-white hover:!text-zinc-900 dark:hover:!text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200"
                     {...register('preparation', {
                       required: 'Preparation time is required',
                     })}
@@ -314,8 +293,7 @@ export default function ProductUpdateForm({ product, id }: ProductUpdateFormProp
                   </Label>
                   <div className="relative">
                     <select
-                      defaultValue={product?.category}
-                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-3 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 cursor-pointer appearance-none text-zinc-900 dark:text-white"
+                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-3 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 cursor-pointer appearance-none !text-zinc-900 dark:!text-white hover:!text-zinc-900 dark:hover:!text-white"
                       {...register('category', {
                         required: 'Category option is required',
                       })}
@@ -349,11 +327,9 @@ export default function ProductUpdateForm({ product, id }: ProductUpdateFormProp
                       <MessageSquare className="w-3.5 h-3.5 text-zinc-400" />
                       Description
                     </Label>
-                    <TextArea
+                    <textarea
                       placeholder="Describe the dish ingredients, taste profile, and details..."
-                      variant="primary"
-                      defaultValue={product?.description}
-                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200 resize-none"
+                      className="w-full bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-sm !text-zinc-900 dark:!text-white hover:!text-zinc-900 dark:hover:!text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/30 focus:border-yellow-450 transition-all duration-200 resize-none"
                       rows={4}
                       {...register('description', {
                         required: 'Description is required',
